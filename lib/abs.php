@@ -35,10 +35,103 @@ abstract class Dbs extends Obj
 
         $sth = $this->pch->prepare($arg);
 
-        $sth->execute($arg);
+        $sth->execute();
 
         return $sth->rowCount();
 
     } // ./exe()
 
+    public function ins($arg)
+    {
+
+        $sth = $this->pch->prepare($arg);
+
+        $sth->execute();
+
+        return $this->pch->lastInsertId();
+
+    } // ./ins()
+
 } // ./Dbs
+
+abstract class Mdl
+{
+
+    protected $dbs;
+    protected $tbl;
+    protected $col;
+
+
+    /**
+     * Create Table
+     */
+    public function crt()
+    {
+
+        $sql = 'CREATE TABLE '.$this->tbl.' (';
+
+        $c = count($this->col)-1;
+
+        $i = 0;
+
+        foreach ($this->col as $key=>$val) {
+
+            $sql .= $key.' '.$val;
+
+            if($i<$c) {
+
+                $sql .= ', ';
+
+            }
+
+            $i++;
+
+        }
+
+        $sql .= ');';
+
+        return $this->dbs->exe($sql);
+
+    }
+
+    /**
+     * Create Table
+     */
+    public function ins($arg)
+    {
+
+        $sql = 'INSERT INTO '.$this->tbl.' (';
+
+        $c = count($this->col)-1;
+
+        $i = 0;
+
+        foreach ($this->col as $key=>$val) {
+
+            $sql .= $key;
+
+            if($i<$c) {
+
+                $sql .= ', ';
+
+            }
+
+            $i++;
+
+        }
+
+        $sql .= ') VALUES (NULL';
+
+        foreach ($arg as $key=>$val) {
+
+            $sql .= ', "'.$val.'"';
+
+        }
+
+        $sql .= ');';
+
+        return $this->dbs->ins($sql);
+
+    }
+
+}
