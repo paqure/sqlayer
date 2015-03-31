@@ -54,11 +54,17 @@ abstract class Dbs extends Obj
 
 } // ./Dbs
 
+/* ABSTRACT MODEL */
 abstract class Mdl
 {
 
+    /* @property object (Dbs Singleton) */
     protected $dbs;
+
+    /* @property string (table name) */
     protected $tbl;
+
+    /* @property assoc (column names => def) */
     protected $col;
 
 
@@ -70,10 +76,13 @@ abstract class Mdl
 
         $sql = 'CREATE TABLE '.$this->tbl.' (';
 
+        // count columns to omit last comma
         $c = count($this->col)-1;
 
+        // initialize increment so we know when we're at last column
         $i = 0;
 
+        // iterate through columns
         foreach ($this->col as $key=>$val) {
 
             $sql .= $key.' '.$val;
@@ -82,30 +91,34 @@ abstract class Mdl
 
                 $sql .= ', ';
 
-            }
+            } // ./if comma needed
 
             $i++;
 
-        }
+        } // ./foreach
 
         $sql .= ');';
 
+        // return affected rows
         return $this->dbs->exe($sql);
 
-    }
+    } // ./crt()
 
     /**
-     * Create Table
+     * Insert Record
      */
     public function ins($arg)
     {
 
         $sql = 'INSERT INTO '.$this->tbl.' (';
 
+        // count columns to omit last comma
         $c = count($this->col)-1;
 
+        // initialize increment so we know when we're at last column
         $i = 0;
 
+        // iterate through columns
         foreach ($this->col as $key=>$val) {
 
             $sql .= $key;
@@ -114,11 +127,11 @@ abstract class Mdl
 
                 $sql .= ', ';
 
-            }
+            } // ./if comma needed
 
             $i++;
 
-        }
+        } // ./foreach key
 
         $sql .= ') VALUES (NULL';
 
@@ -126,12 +139,13 @@ abstract class Mdl
 
             $sql .= ', "'.$val.'"';
 
-        }
+        } // ./foreach value
 
         $sql .= ');';
 
+        // return lastInsertId
         return $this->dbs->ins($sql);
 
-    }
+    } // ./ins()
 
-}
+} // ./Mdl
