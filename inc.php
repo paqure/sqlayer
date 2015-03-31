@@ -14,8 +14,7 @@ $fsi = new DirectoryIterator(SQLAYER_ROOT.'/lib');
 
 foreach ($fsi as $fil) {
 
-    // from php.net/manual/en/directoryiterator.isdot.php
-    if(!$fil->isDot()) {
+    if(substr($fil->getFilename(),0,1)!='.') {
 
         require_once(SQLAYER_ROOT.'/lib/'.$fil);
 
