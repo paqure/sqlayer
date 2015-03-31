@@ -10,14 +10,16 @@
 
 define('SQLAYER_ROOT',__DIR__);
 
-$fsi = new FilesystemIterator(SQLAYER_ROOT.'/lib');
+$fsi = new DirectoryIterator(SQLAYER_ROOT.'/lib');
 
 foreach ($fsi as $fil) {
 
+    // from php.net/manual/en/directoryiterator.isdot.php
     if(!$fil->isDot()) {
 
-        require_once($fil);
+        require_once(SQLAYER_ROOT.'/lib/'.$fil);
 
     }
 
 }
+
