@@ -183,3 +183,58 @@ abstract class Mdl
     }
 
 } // ./Mdl
+
+/* ABSTRACT VIEW */
+abstract class Vue
+{
+
+    /* @property string (open) */
+    protected $opn;
+
+    /* @property string (content) */
+    protected $cnt;
+
+    /* @property string (close) */
+    protected $cls;
+
+    public function setCnt($arg)
+    {
+
+        $this->cnt = $arg;
+
+    }
+
+    public function htm()
+    {
+
+        $htm = $this->opn;
+
+        if(is_numeric($this->cnt) || is_string($this->cnt)) {
+
+            $htm .= $this->cnt;
+
+        } elseif(is_object($this->cnt)) {
+
+            $htm .= $this->cnt->htm();
+
+        } elseif(is_array($this->cnt)) {
+
+            foreach ($this->cnt as $vue) {
+
+                $htm .= $vue->htm();
+
+            }
+
+        } else {
+
+            $htm .= '&nbsp;';
+
+        }
+
+        $htm .= $this->cls.PHP_EOL;
+
+        return $htm;
+
+    }
+
+}
