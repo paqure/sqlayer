@@ -52,6 +52,21 @@ abstract class Dbs extends Obj
 
     } // ./ins()
 
+    /**
+     * @param $arg
+     * @return string (sql query string)
+     */
+    public function ftcRec($arg)
+    {
+
+        $sth = $this->pch->prepare($arg);
+
+        $sth->execute();
+
+        return $sth->fetch(\PDO::FETCH_ASSOC);
+
+    }
+
 } // ./Dbs
 
 /* ABSTRACT MODEL */
@@ -147,5 +162,24 @@ abstract class Mdl
         return $this->dbs->ins($sql);
 
     } // ./ins()
+
+    public function objFromId($arg)
+    {
+
+        $sql = 'SELECT * FROM '.$this->tbl.' WHERE oid = '.$arg.';';
+
+        $rec = $this->dbs->ftcRec($sql);
+
+        $obj = new TblObj();
+
+        foreach($rec as $key=>$val) {
+
+            $obj->$key = $val;
+
+        }
+
+        return $obj;
+
+    }
 
 } // ./Mdl
